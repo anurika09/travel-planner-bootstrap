@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Destination Selector</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            /*background-image: url('https://plus.unsplash.com/premium_photo-1661964304872-7b715cf38cd1?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); */
+            background-image: url('https://images.unsplash.com/photo-1596486932489-f631d4ccceaa?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+      
+      /* Make the image cover the whole page */
+      background-size: cover; 
+      
+      /* Ensure the image stays in place while scrolling */
+      background-attachment: fixed;
+      
+      /* Center the image */
+      background-position: center; 
+      
+      /* Use no-repeat to prevent tiling */
+      background-repeat: no-repeat; 
+        }
+        /* The side navigation menu */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -200px; /* Hidden initially */
+            width: 200px;
+            height: 100%;
+            background-color: #f1f1f1;
+            overflow: auto;
+            transition: left 0.3s; /* Smooth slide effect */
+            z-index: 1000;
+        }
+
+        .sidebar.active {
+            left: 0; /* Slide in */
+        }
+
+        .sidebar a {
+            display: block;
+            color: black;
+            padding: 16px;
+            text-decoration: none;
+        }
+
+        .sidebar a.active {
+            background-color: #229083;
+            color: white;
+        }
+
+        .sidebar a:hover:not(.active) {
+            background-color: #555;
+            color: white;
+        }
+
+        .menu-toggle {
+            /*position: fixed;*/
+            margin-top: 15px;
+            margin-left: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            background-color: #229083;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            transition: opacity 0.3s; /* Smooth hide effect */
+            z-index: 1001;
+        }
+
+        .menu-toggle.hidden {
+            opacity: 0; /* Hide the toggle button */
+            pointer-events: none; /* Prevent clicking */
+        }
+
+        div.content {
+            margin-left: 0;
+            padding: 1px 16px;
+            transition: margin-left 0.3s; /* Smooth content shift */
+        }
+
+        div.content.shifted {
+            margin-left: 200px; /* Adjusted for the sidebar width */
+        }
+
+        .header {
+            background-color: #105951; /*#2a9d8f--*/
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 20px;
+            margin-top : 20px;
+            border-radius: 10px;
+        }
+        .form-section {
+            background: rgba(255, 255, 255, 0.307);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .destination-card img {
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn-custom {
+        background-color: #229083; /* Custom color */
+        color: white; /* Text color */
+        }
+        .btn-custom:hover {
+        background-color: #229083c7; /* Change background color on hover */
+        color: black; /* Change text color on hover */
+    }
+    .banner-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px; /* Match the style of the header */
+    margin-bottom: 20px;
+}
+
+.banner-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px; /* Optional for aesthetic */
+}
+
+.banner-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    animation: fadeInUp 1.5s ease-out;
+    opacity: 0; /* Start hidden */
+    animation-fill-mode: forwards; /* Retain final state after animation */
+}
+
+/* Fade-in and slide-up animation */
+@keyframes fadeInUp {
+    0% {
+        transform: translate(-50%, 30%);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+    </style>
+</head>
+<body>
+    
+     <!-- Menu Toggle Button -->
+     <button class="menu-toggle" id="menuToggle">☰</button>
+
+     <!-- Sidebar -->
+     <div class="sidebar" id="sidebar">
+         <a class="active" href="index.html">Home</a>
+         <a href="#news">News</a>
+         <a href="#contact">Contact</a>
+         <a href="#about">About</a>
+     </div>
+  <div class="content">
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Travel Destination Selector</h1>
+            <p>Discover the best destinations tailored for you!</p>
+        </div>
+        <!-- Animated Banner -->
+<div class="banner-image">
+    <img src="https://images.aircharterservice.com/content/banner-the-most-exclusive-travel-destinations-and-escapes.jpg" 
+         alt="Discover Travel Moments" class="w-100">
+    <div class="banner-text">
+        <h2>Discover Story-worthy Travel Moments</h2>
+    </div>
+</div>
+        <!-- Travel Preference Form -->
+        <div class="form-section">
+            <h3 class="mb-3">Choose Your Preferences</h3>
+            <form id="travelForm" class="row g-3">
+                <div class="col-md-6">
+                    <label for="destination" class="form-label">Select Destination</label>
+                    <select class="form-select" id="destination" required>
+                        <option value="">Choose...</option>
+                        <option value="paris">Paris</option>
+                        <option value="tokyo">Tokyo</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="duration" class="form-label">Duration (days)</label>
+                    <input type="number" class="form-control" id="duration" placeholder="Enter number of days" min="1" required>
+                </div>
+                
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-custom w-100">Show Recommendations</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Recommendations Section -->
+        <div id="recommendations" class="row g-4">
+            <!-- Cards will be dynamically added here -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <ul class="pagination">
+                <!-- Pagination items will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        const menuToggle = document.getElementById("menuToggle");
+        const sidebar = document.getElementById("sidebar");
+        const content = document.getElementById("content");
+
+        // Toggle sidebar and hide button
+        menuToggle.addEventListener("click", (event) => {
+            sidebar.classList.toggle("active");
+            content.classList.toggle("shifted");
+            menuToggle.classList.toggle("hidden"); // Hide the toggle button
+            event.stopPropagation(); // Prevent the event from bubbling to the document
+        });
+
+        // Collapse sidebar on clicking anywhere outside
+        document.addEventListener("click", (event) => {
+            const isClickInsideSidebar = sidebar.contains(event.target);
+            const isClickOnToggle = menuToggle.contains(event.target);
+
+            if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains("active")) {
+                sidebar.classList.remove("active");
+                content.classList.remove("shifted");
+                menuToggle.classList.remove("hidden"); // Show the toggle button
+            }
+        });
+
+        // Prevent sidebar from closing when clicking inside it
+        sidebar.addEventListener("click", (event) => {
+            event.stopPropagation();
+        });
+        const recommendations = {
+            paris: [
+                { name: "Eiffel Tower", image: "https://plus.unsplash.com/premium_photo-1661963064037-cfcf2e10db2d?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "Iconic tower with a stunning view." },
+                { name: "Louvre Museum", image: "https://images.unsplash.com/photo-1678895595317-b42a309f87f5?q=80&w=1827&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "World's largest art museum." },
+                { name: "Notre Dame Cathedral", image: "https://images.unsplash.com/photo-1522289849170-49c9c3c6a460?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "Gothic cathedral with amazing architecture." },
+                { name: "Montmartre", image: "https://images.unsplash.com/photo-1639912008517-a065cf25745d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/1200x300", desc: "Charming hilltop village." },
+                { name: "Palace of Versailles", image: "https://plus.unsplash.com/premium_photo-1661962571049-792ae9be2d79?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGFsYWNlJTIwb2YlMjB2ZXJzYWlsbGVzfGVufDB8fDB8fHww", desc: "Immense, 18th-century palace with gilded apartments, chandeliered Hall of Mirrors & fountain show."},
+                { name: "DisneyLand", image: "https://media.istockphoto.com/id/2170942445/photo/view-of-rock-formation-against-cloudy-sky.webp?a=1&b=1&s=612x612&w=0&k=20&c=hH-ttCL4QVfIG6ANs3OS8frmJitUawZUoOBYIg-VF_Q=", desc:"Theme park complex featuring family-friendly rides, shows and costumed characters, plus hotels."}
+            ],
+            tokyo: [
+                { name: "Tokyo Tower", image: "https://plus.unsplash.com/premium_photo-1661914240950-b0124f20a5c1?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "Landmark tower with great views." },
+                { name: "Shibuya Crossing", image: "https://plus.unsplash.com/premium_photo-1661902398022-762e88ff3f82?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "World's busiest pedestrian crossing." },
+                { name: "Meiji Shrine", image: "https://plus.unsplash.com/premium_photo-1690957796569-32bd288ca4bb?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "Peaceful Shinto shrine." },
+                { name: "Akihabara", image: "https://plus.unsplash.com/premium_photo-1725404406448-07c18ea6e99e?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "Famous district for electronics and anime." }
+            ]
+        };
+
+        let itemsPerPage = 2;
+        let currentPage = 1;
+        let currentDestination = "";
+
+        
+
+        document.getElementById("travelForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    currentDestination = document.getElementById("destination").value;
+    const duration = parseInt(document.getElementById("duration").value, 10);
+
+    if (!currentDestination || isNaN(duration) || duration <= 0) {
+        alert("Please fill out all fields with valid values.");
+        return;
+    }
+
+    currentPage = 1;
+    showRecommendations(duration);
+});
+
+function showRecommendations(duration) {
+    const recSection = document.getElementById("recommendations");
+    const pagination = document.querySelector(".pagination");
+    const recs = recommendations[currentDestination] || [];
+
+    recSection.innerHTML = "";
+    pagination.innerHTML = "";
+
+    // Calculate items per day and group them
+    const itemsPerDay = Math.ceil(recs.length / duration);
+    const groupedRecs = [];
+    for (let i = 0; i < recs.length; i += itemsPerDay) {
+        groupedRecs.push(recs.slice(i, i + itemsPerDay));
+    }
+
+    // Display recommendations for the current page
+    displayPage(groupedRecs);
+
+    // Set up pagination
+    const totalPages = groupedRecs.length;
+    for (let i = 1; i <= totalPages; i++) {
+        const pageItem = `
+            <li class="page-item ${i === currentPage ? "active" : ""}">
+                <a class="page-link" href="#">${i}</a>
+            </li>
+        `;
+        pagination.innerHTML += pageItem;
+    }
+
+    // Add event listeners to pagination links
+    pagination.querySelectorAll(".page-link").forEach((link, index) => {
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+            currentPage = index + 1;
+            displayPage(groupedRecs);
+            updateActivePage();
+        });
+    });
+}
+
+function displayPage(groupedRecs) {
+    const recSection = document.getElementById("recommendations");
+    recSection.innerHTML = "";
+
+    const dayGroup = groupedRecs[currentPage - 1];
+    const dayIndex = currentPage; // Display "Day X" based on the current page
+
+    // Add a header for the current day
+    const dayHeader = `
+        <div class="col-12">
+            <h4>Day ${dayIndex}</h4>
+        </div>
+    `;
+    recSection.innerHTML += dayHeader;
+
+    // Display items for the current day
+    dayGroup.forEach(rec => {
+        const card = `
+            <div class="col-md-6">
+                <div class="card destination-card">
+                    <img src="${rec.image}" class="card-img-top" alt="${rec.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${rec.name}</h5>
+                        <p class="card-text">${rec.desc}</p>
+                        <a href="second.html?destination=${currentDestination}&attraction=${encodeURIComponent(rec.name)}" class="btn btn-light">Details</a>
+                    </div>
+                </div>
+            </div>
+        `;
+        recSection.innerHTML += card;
+    });
+}
+
+function updateActivePage() {
+    const paginationItems = document.querySelectorAll(".page-item");
+    paginationItems.forEach((item, index) => {
+        if (index === currentPage - 1) {
+            item.classList.add("active");
+        } else {
+            item.classList.remove("active");
+        }
+    });
+}
+</script>
+</body>
+</html>

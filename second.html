@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Destination Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #e9cfa5;
+            font-family: Arial, sans-serif;
+        }
+        /* The side navigation menu */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -200px; /* Hidden initially */
+            width: 200px;
+            height: 100%;
+            background-color: #f1f1f1;
+            overflow: auto;
+            transition: left 0.3s; /* Smooth slide effect */
+            z-index: 1000;
+        }
+
+        .sidebar.active {
+            left: 0; /* Slide in */
+        }
+
+        .sidebar a {
+            display: block;
+            color: black;
+            padding: 16px;
+            text-decoration: none;
+        }
+
+        .sidebar a.active {
+            background-color: #229083;
+            color: white;
+        }
+
+        .sidebar a:hover:not(.active) {
+            background-color: #555;
+            color: white;
+        }
+
+        .menu-toggle {
+            /*position: fixed;*/
+            margin-top: 15px;
+            margin-left: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            background-color: #229083;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            transition: opacity 0.3s; /* Smooth hide effect */
+            z-index: 1001;
+        }
+
+        .menu-toggle.hidden {
+            opacity: 0; /* Hide the toggle button */
+            pointer-events: none; /* Prevent clicking */
+        }
+
+        div.content {
+            margin-left: 0;
+            padding: 1px 16px;
+            transition: margin-left 0.3s; /* Smooth content shift */
+        }
+
+        div.content.shifted {
+            margin-left: 200px; /* Adjusted for the sidebar width */
+        }
+
+        .header {
+            background-color: #105951;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+        .carousel img {
+            height: 300px;
+            object-fit: cover;
+        }
+        .star-rating {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Toggle Button -->
+    <button class="menu-toggle" id="menuToggle">☰</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a class="active" href="index.html">Home</a>
+        <a href="#news">News</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+    </div>
+ <div class="content">
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Explore Destination Details</h1>
+            <p>Find your perfect plan, dining, and stay options.</p>
+        </div>
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Destination Details</li>
+            </ol>
+        </nav>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="destinationTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="daywise-tab" data-bs-toggle="tab" data-bs-target="#daywise" type="button" role="tab" aria-controls="daywise" aria-selected="true">Day-wise Plan</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="restaurants-tab" data-bs-toggle="tab" data-bs-target="#restaurants" type="button" role="tab" aria-controls="restaurants" aria-selected="false">Restaurants</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="hotels-tab" data-bs-toggle="tab" data-bs-target="#hotels" type="button" role="tab" aria-controls="hotels" aria-selected="false">Hotels</button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Day-wise Plan -->
+            <div class="tab-pane fade show active" id="daywise" role="tabpanel" aria-labelledby="daywise-tab">
+                <div class="accordion mt-4" id="dayPlanAccordion">
+                    <div id="itineraryContent"></div>
+                </div>
+            </div>
+
+            <!-- Restaurants -->
+            <div class="tab-pane fade" id="restaurants" role="tabpanel" aria-labelledby="restaurants-tab">
+                <div id="restaurantCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+                    <div class="carousel-inner" id="restaurantContent"></div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#restaurantCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#restaurantCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hotels -->
+            <div class="tab-pane fade" id="hotels" role="tabpanel" aria-labelledby="hotels-tab">
+                <div id="hotelCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+                    <div class="carousel-inner" id="hotelContent"></div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        const menuToggle = document.getElementById("menuToggle");
+        const sidebar = document.getElementById("sidebar");
+        const content = document.getElementById("content");
+
+        // Toggle sidebar and hide button
+        menuToggle.addEventListener("click", (event) => {
+            sidebar.classList.toggle("active");
+            content.classList.toggle("shifted");
+            menuToggle.classList.toggle("hidden"); // Hide the toggle button
+            event.stopPropagation(); // Prevent the event from bubbling to the document
+        });
+
+        // Collapse sidebar on clicking anywhere outside
+        document.addEventListener("click", (event) => {
+            const isClickInsideSidebar = sidebar.contains(event.target);
+            const isClickOnToggle = menuToggle.contains(event.target);
+
+            if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains("active")) {
+                sidebar.classList.remove("active");
+                content.classList.remove("shifted");
+                menuToggle.classList.remove("hidden"); // Show the toggle button
+            }
+        });
+
+        // Prevent sidebar from closing when clicking inside it
+        sidebar.addEventListener("click", (event) => {
+            event.stopPropagation();
+        });
+        const queryParams = new URLSearchParams(window.location.search);
+        const destination = queryParams.get('destination');
+
+        const details = {
+            paris: {
+                itinerary: [
+                    "Day 1: Arrival and visit to the Eiffel Tower and Seine River cruise.",
+                    "Day 2: Louvre Museum and Champs-Élysées."
+                ],
+                restaurants: [
+                    { name: "Le Gourmet", image: "https://images.unsplash.com/photo-1455587734955-081b22074882?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "Authentic French cuisine." },
+                    { name: "Café de Flore", image: "https://images.unsplash.com/photo-1493857671505-72967e2e2760?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "Famous Parisian café." }
+                ],
+                hotels: [
+                    { name: "Hotel Luxe", image: "https://images.unsplash.com/photo-1529290130-4ca3753253ae?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/1200x300", desc: "Luxury stay near the Eiffel Tower." },
+                    { name: "Cozy Inn", image: "https://images.unsplash.com/photo-1483095348487-53dbf97d8d5b?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/1200x300", desc: "Affordable and comfortable." }
+                ]
+            },
+            tokyo: {
+                itinerary: [
+                    "Day 1: Tokyo Tower and Shibuya Crossing.",
+                    "Day 2: Meiji Shrine and Akihabara."
+                ],
+                restaurants: [
+                    { name: "Sakura Delight", image: "https://images.unsplash.com/photo-1494346480775-936a9f0d0877?q=80&w=1716&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "Traditional Japanese dishes." },
+                    { name: "Ramen Ichiraku", image: "https://images.unsplash.com/photo-1591325418441-ff678baf78ef?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/300x200", desc: "Best ramen in Tokyo." }
+                ],
+                hotels: [
+                    { name: "Shinjuku Grand", image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/1200x300", desc: "Luxury stay with city views." },
+                    { name: "Tokyo Budget Stay", image: "https://images.unsplash.com/photo-1480796927426-f609979314bd?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D/1200x300", desc: "Affordable and convenient." }
+                ]
+            }
+        };
+
+        const destinationDetails = details[destination] || {};
+
+        // Populate Itinerary
+        const itineraryContent = destinationDetails.itinerary || [];
+        document.getElementById('itineraryContent').innerHTML = itineraryContent.map((item, index) => `
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button ${index === 0 ? "" : "collapsed"}" type="button" data-bs-toggle="collapse" data-bs-target="#day${index + 1}" aria-expanded="${index === 0}" aria-controls="day${index + 1}">
+                        Day ${index + 1}
+                    </button>
+                </h2>
+                <div id="day${index + 1}" class="accordion-collapse collapse ${index === 0 ? "show" : ""}">
+                    <div class="accordion-body">${item}</div>
+                </div>
+            </div>
+        `).join('');
+
+        // Populate Restaurants
+        const restaurantContent = destinationDetails.restaurants || [];
+        document.getElementById('restaurantContent').innerHTML = restaurantContent.map((item, index) => `
+            <div class="carousel-item ${index === 0 ? "active" : ""}">
+                <img src="${item.image}" class="d-block w-100" alt="${item.name}">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>${item.name}</h5>
+                    <p>${item.desc}</p>
+                </div>
+            </div>
+        `).join('');
+
+        // Populate Hotels
+        const hotelContent = destinationDetails.hotels || [];
+        document.getElementById('hotelContent').innerHTML = hotelContent.map((item, index) => `
+            <div class="carousel-item ${index === 0 ? "active" : ""}">
+                <img src="${item.image}" class="d-block w-100" alt="${item.name}">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>${item.name}</h5>
+                    <p>${item.desc}</p>
+                </div>
+            </div>
+        `).join('');
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
